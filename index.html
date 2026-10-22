@@ -4,132 +4,414 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blossom AI 🌸</title>
+  <title>Blossom AI 💗 Your Sarcastic Bestie</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      margin: 0; font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #fff0f6, #f2eaff);
-      color: #382b3b; min-height: 100vh;
-      display: flex; justify-content: center; align-items: center;
-      padding: 16px;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      background: linear-gradient(135deg, #fff0f6, #f1e8ff, #ffe4ef);
+      color: #49344f;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 14px 12px;
     }
-    .app {
-      width: 100%; max-width: 720px; height: 85vh; min-height: 480px;
-      background: #ffffff; border-radius: 22px; overflow: hidden;
-      box-shadow: 0 12px 40px #aa83b533;
-      display: flex; flex-direction: column;
+
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: auto;
     }
+
     header {
-      padding: 20px; background: #f9d9e8;
-      display: flex; align-items: center; gap: 12px;
+      text-align: center;
+      margin-bottom: 22px;
     }
-    .flower { font-size: 34px; }
-    h1 { margin: 0; font-size: 23px; }
-    header p { margin: 5px 0 0; font-size: 13px; color: #725c70; }
-    #chat {
-      flex: 1; overflow-y: auto; padding: 20px;
-      display: flex; flex-direction: column; gap: 14px;
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 25px;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 5px 12px #e9a5d788);
     }
+
+    h1 {
+      color: #d64c96;
+      font-size: clamp(32px, 7vw, 46px);
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      color: #86658e;
+      font-size: 15px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #ffffffb8;
+      border: 1px solid #f3c9e2;
+      padding: 8px 13px;
+      border-radius: 30px;
+      font-size: 12px;
+      margin-top: 14px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #55c88a;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #55c88a;
+    }
+
+    .chat-card {
+      background: #ffffffd9;
+      border: 1px solid #f5cfe7;
+      border-radius: 25px;
+      box-shadow: 0 14px 45px #bd7db51f;
+      overflow: hidden;
+    }
+
+    .chat-heading {
+      background: linear-gradient(100deg, #ffd9eb, #e9dcff);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mini-logo {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      background: #ffffffb8;
+      border-radius: 14px;
+      padding: 4px;
+    }
+
+    .chat-heading h2 {
+      font-size: 16px;
+      color: #8f3e85;
+    }
+
+    .chat-heading p {
+      font-size: 12px;
+      color: #8b6b91;
+      margin-top: 4px;
+    }
+
+    #messages {
+      height: 390px;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+    }
+
     .message {
-      padding: 12px 15px; border-radius: 16px;
-      max-width: 85%; white-space: pre-wrap; line-height: 1.5;
+      max-width: 85%;
+      padding: 12px 15px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
-    .bot { background: #f7eaf8; align-self: flex-start; }
-    .user { background: #dce9ff; align-self: flex-end; }
-    .composer {
-      display: flex; gap: 9px; padding: 15px;
-      border-top: 1px solid #f0e7f0;
+
+    .bot {
+      align-self: flex-start;
+      background: #f4e9ff;
+      border: 1px solid #e7d4fa;
+      border-bottom-left-radius: 5px;
     }
-    input {
-      min-width: 0; flex: 1; border: 1px solid #e1d4e5;
-      border-radius: 25px; padding: 13px 16px; font-size: 15px;
-      outline-color: #d78bb7;
+
+    .user {
+      align-self: flex-end;
+      color: white;
+      background: linear-gradient(135deg, #e86bac, #b783df);
+      border-bottom-right-radius: 5px;
     }
-    button {
-      border: 0; border-radius: 25px; background: #d86ba4;
-      color: white; font-weight: bold; padding: 0 20px;
+
+    .typing {
+      color: #9876a0;
+      font-size: 12px;
+      padding: 0 20px 10px;
+      display: none;
+    }
+
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 16px 14px;
+    }
+
+    .suggestions button {
+      border: 1px solid #edc6e3;
+      background: #fff5fb;
+      color: #a34d8e;
+      padding: 8px 12px;
+      border-radius: 20px;
       cursor: pointer;
+      font-size: 12px;
+      transition: 0.2s;
     }
-    button:disabled { opacity: .6; cursor: wait; }
-    footer { text-align: center; padding: 0 10px 12px; color: #917d91; font-size: 11px; }
-    @media(max-width: 480px) {
-      .app { height: 90vh; }
-      header { padding: 15px; }
-      #chat { padding: 14px; }
-      .message { max-width: 92%; }
+
+    .suggestions button:hover {
+      background: #f9d9ec;
+      transform: translateY(-1px);
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+      padding: 15px;
+      border-top: 1px solid #f3dcec;
+      background: #fffaff;
+    }
+
+    #userInput {
+      min-width: 0;
+      flex: 1;
+      border: 1px solid #e8c8e4;
+      border-radius: 25px;
+      padding: 13px 17px;
+      outline: none;
+      font-size: 14px;
+      font-family: inherit;
+      background: white;
+      color: #49344f;
+    }
+
+    #userInput:focus {
+      border-color: #d76ab1;
+      box-shadow: 0 0 0 3px #f8d8eb;
+    }
+
+    #sendBtn {
+      border: none;
+      border-radius: 50%;
+      width: 47px;
+      height: 47px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #ed70b3, #b184e4);
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px #d57ab444;
+      transition: 0.2s;
+    }
+
+    #sendBtn:hover {
+      transform: scale(1.06);
+    }
+
+    #sendBtn:disabled {
+      opacity: 0.55;
+      cursor: wait;
+      transform: none;
+    }
+
+    footer {
+      text-align: center;
+      color: #96799b;
+      font-size: 12px;
+      padding: 22px 10px 8px;
+      line-height: 1.8;
+    }
+
+    footer strong {
+      color: #d64c96;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px 10px 8px;
+      }
+
+      .logo {
+        width: 82px;
+        height: 82px;
+      }
+
+      #messages {
+        height: 55vh;
+        min-height: 300px;
+        padding: 14px;
+      }
+
+      .message {
+        max-width: 92%;
+      }
+
+      .input-area {
+        padding: 11px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <main class="app">
+  <main class="container">
     <header>
-      <div class="flower">🌸</div>
-      <div>
-        <h1>Blossom AI</h1>
-        <p>Your witty, slightly chaotic AI bestie ✨</p>
+      <img class="logo" src="./blossom-logo.png" alt="Blossom AI logo">
+      <h1>Blossom AI 🌸</h1>
+      <p class="subtitle">Your AI bestie. Zero chill. Unlimited sass. 💅</p>
+      <div class="status">
+        <span class="dot"></span>
+        Your chaotic bestie is ready
       </div>
     </header>
 
-    <section id="chat" aria-live="polite">
-      <div class="message bot">Hey bestie! 🌸 I'm Blossom. English, Hindi, Hinglish, Odia, Bhojpuri—bring it on. What's happening in that brain of yours? 👀</div>
+    <section class="chat-card">
+      <div class="chat-heading">
+        <img class="mini-logo" src="./blossom-logo.png" alt="">
+        <div>
+          <h2>Blossom 🌷</h2>
+          <p>Here for the tea, the drama & the solutions.</p>
+        </div>
+      </div>
+
+      <div id="messages" aria-live="polite">
+        <div class="message bot">Hey bestieee! 💗 I'm Blossom. Your favourite questionable life decision starts here. 😂🌸
+
+So, what's the tea? Spill it. 👀</div>
+      </div>
+
+      <div class="typing" id="typing">Blossom is cooking up a comeback... 💅</div>
+
+      <div class="suggestions">
+        <button type="button" data-message="Roast me, but lovingly.">Roast me 😂</button>
+        <button type="button" data-message="I have some drama to share.">Spill the tea 👀</button>
+        <button type="button" data-message="Give me some brutally honest advice.">Be brutally honest 💅</button>
+        <button type="button" data-message="I'm bored. Entertain me.">I'm bored 🥹</button>
+      </div>
+
+      <form class="input-area" id="chatForm">
+        <input
+          id="userInput"
+          type="text"
+          placeholder="Text your bestie... 💌"
+          autocomplete="off"
+          maxlength="4000"
+          aria-label="Your message"
+          required
+        >
+        <button id="sendBtn" type="submit" aria-label="Send message">➤</button>
+      </form>
     </section>
 
-    <form class="composer" id="form">
-      <input id="message" placeholder="Say something, bestie..." autocomplete="off" required>
-      <button id="send" type="submit">Send ➤</button>
-    </form>
-    <footer>Blossom AI · Be nice-ish 💗</footer>
+    <footer>
+      Made with 💗 and questionable levels of sass<br>
+      by <strong>Shradha Subhadarshini</strong> 🌸
+    </footer>
   </main>
 
   <script>
     const API_URL = "https://blossom-ai-api.thebotblossom.workers.dev/api/chat";
-    const chat = document.getElementById("chat");
-    const form = document.getElementById("form");
-    const input = document.getElementById("message");
-    const send = document.getElementById("send");
-    const history = [];
 
-    function addMessage(text, role) {
-      const div = document.createElement("div");
-      div.className = "message " + (role === "user" ? "user" : "bot");
-      div.textContent = text;
-      chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("userInput");
+    const messages = document.getElementById("messages");
+    const typing = document.getElementById("typing");
+    const sendBtn = document.getElementById("sendBtn");
+
+    const conversation = [];
+
+    function addMessage(text, sender) {
+      const bubble = document.createElement("div");
+      bubble.className = "message " + sender;
+      bubble.textContent = text;
+      messages.appendChild(bubble);
+      messages.scrollTop = messages.scrollHeight;
     }
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const message = input.value.trim();
-      if (!message) return;
+    async function sendMessage(message) {
+      const cleanMessage = message.trim();
 
-      addMessage(message, "user");
+      if (!cleanMessage || sendBtn.disabled) return;
+
+      addMessage(cleanMessage, "user");
       input.value = "";
-      send.disabled = true;
-      send.textContent = "...";
+      sendBtn.disabled = true;
+      typing.style.display = "block";
+      messages.scrollTop = messages.scrollHeight;
 
       try {
         const response = await fetch(API_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message, history })
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: cleanMessage,
+            messages: conversation
+          })
         });
+
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "Request failed");
-        const reply = data.reply || "My brain cells took a coffee break. Try again?";
-        addMessage(reply, "assistant");
-        history.push({ role: "user", content: message });
-        history.push({ role: "assistant", content: reply });
-        if (history.length > 16) history.splice(0, history.length - 16);
+
+        if (!response.ok) {
+          throw new Error(data.error || "The server had a little meltdown.");
+        }
+
+        const reply =
+          data.reply ||
+          data.response ||
+          data.message ||
+          data.choices?.[0]?.message?.content;
+
+        if (!reply) {
+          throw new Error("Blossom sent an empty reply. Try again!");
+        }
+
+        conversation.push(
+          { role: "user", content: cleanMessage },
+          { role: "assistant", content: reply }
+        );
+
+        // Keep recent context so the conversation doesn't grow endlessly.
+        if (conversation.length > 20) {
+          conversation.splice(0, conversation.length - 20);
+        }
+
+        addMessage(reply, "bot");
       } catch (error) {
-        addMessage("Oops! I couldn't reach my AI brain. " + error.message +
-          " — this may be a connection setting we need to fix.", "assistant");
+        console.error("Blossom chat error:", error);
+        addMessage(
+          "Bestie, my brain just tripped over its own shoelaces. 😭💗 Something went wrong connecting to my AI. Try again in a moment.",
+          "bot"
+        );
       } finally {
-        send.disabled = false;
-        send.textContent = "Send ➤";
+        typing.style.display = "none";
+        sendBtn.disabled = false;
         input.focus();
       }
+    }
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+      sendMessage(input.value);
+    });
+
+    document.querySelectorAll(".suggestions button").forEach(function(button) {
+      button.addEventListener("click", function() {
+        sendMessage(button.dataset.message);
+      });
     });
   </script>
 </body>
