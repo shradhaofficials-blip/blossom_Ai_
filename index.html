@@ -4,9 +4,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blossom AI 💗 Your Sarcastic Bestie</title>
+  <meta name="theme-color" content="#ffe5f1">
+  <title>Blossom AI 🌸 Your Chaotic Bestie</title>
 
   <style>
+    :root {
+      --pink: #f28abd;
+      --hot-pink: #df5fa5;
+      --lavender: #c8adfa;
+      --purple: #9164c8;
+      --ink: #59415f;
+      --muted: #997da1;
+      --glass: rgba(255, 255, 255, 0.78);
+      --border: rgba(225, 161, 208, 0.48);
+      --shadow: 0 20px 60px rgba(190, 116, 174, 0.18);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -14,102 +27,213 @@
     }
 
     body {
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      background: linear-gradient(135deg, #fff0f6, #f1e8ff, #ffe4ef);
-      color: #49344f;
       min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 8% 10%, #ffd5e8 0, transparent 38%),
+        radial-gradient(ellipse at 92% 18%, #dfd1ff 0, transparent 38%),
+        radial-gradient(ellipse at 50% 100%, #ffe4f1 0, transparent 45%),
+        #fff7fc;
+      padding: 24px 14px 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 24px 14px 12px;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible, input:focus-visible {
+      outline: 3px solid #d98bd2;
+      outline-offset: 3px;
+    }
+
+    /* Floating flower and heart decorations */
+
+    .decorations {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .petal {
+      position: absolute;
+      bottom: -60px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 3px 5px #e8a2ce30);
+    }
+
+    .petal:nth-child(1) { left: 7%; animation-duration: 13s; animation-delay: 0s; }
+    .petal:nth-child(2) { left: 20%; animation-duration: 16s; animation-delay: 4s; }
+    .petal:nth-child(3) { left: 79%; animation-duration: 14s; animation-delay: 2s; }
+    .petal:nth-child(4) { left: 91%; animation-duration: 18s; animation-delay: 6s; }
+    .petal:nth-child(5) { left: 53%; animation-duration: 17s; animation-delay: 8s; }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      12% { opacity: 0.65; }
+      85% { opacity: 0.55; }
+      100% { transform: translateY(-110vh) rotate(240deg); opacity: 0; }
     }
 
     .container {
+      position: relative;
+      z-index: 1;
       width: 100%;
-      max-width: 760px;
+      max-width: 790px;
       margin: auto;
     }
 
+    /* Header */
+
     header {
       text-align: center;
-      margin-bottom: 22px;
+      margin: 0 auto 22px;
+    }
+
+    .logo-wrap {
+      display: inline-block;
+      position: relative;
+      margin-bottom: 10px;
+      animation: bob 3s ease-in-out infinite;
+    }
+
+    .logo-wrap::after {
+      content: "✦";
+      position: absolute;
+      top: 2px;
+      right: -13px;
+      color: #e7a4dc;
+      font-size: 23px;
+      animation: twinkle 1.8s ease-in-out infinite;
     }
 
     .logo {
-      width: 100px;
-      height: 100px;
+      width: 104px;
+      height: 104px;
       object-fit: contain;
-      border-radius: 25px;
-      margin-bottom: 10px;
-      filter: drop-shadow(0 5px 12px #e9a5d788);
+      border-radius: 30px;
+      filter: drop-shadow(0 8px 14px #df9acb70);
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-7px) rotate(2deg); }
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.4; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
     }
 
     h1 {
-      color: #d64c96;
-      font-size: clamp(32px, 7vw, 46px);
-      letter-spacing: -1px;
+      font-size: clamp(35px, 8vw, 49px);
+      letter-spacing: -1.8px;
+      color: var(--hot-pink);
+      text-shadow: 0 3px 0 #fff;
     }
 
     .subtitle {
       margin-top: 7px;
-      color: #86658e;
-      font-size: 15px;
+      font-size: 14px;
+      color: #9979a5;
     }
 
     .status {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      background: #ffffffb8;
-      border: 1px solid #f3c9e2;
-      padding: 8px 13px;
+      gap: 8px;
+      margin-top: 15px;
+      padding: 9px 15px;
+      border: 1px solid var(--border);
       border-radius: 30px;
+      background: #ffffffb8;
+      color: #8d668e;
       font-size: 12px;
-      margin-top: 14px;
+      box-shadow: 0 4px 15px #d99acb16;
     }
 
     .dot {
       width: 8px;
       height: 8px;
-      background: #55c88a;
       border-radius: 50%;
-      box-shadow: 0 0 8px #55c88a;
+      background: #68c99b;
+      box-shadow: 0 0 9px #68c99b;
+      animation: pulse 1.7s infinite;
     }
 
+    @keyframes pulse {
+      50% { box-shadow: 0 0 0 5px #68c99b25; }
+    }
+
+    /* Chat panel */
+
     .chat-card {
-      background: #ffffffd9;
-      border: 1px solid #f5cfe7;
-      border-radius: 25px;
-      box-shadow: 0 14px 45px #bd7db51f;
       overflow: hidden;
+      border: 1px solid #f1cce6;
+      border-radius: 30px;
+      background: var(--glass);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: box-shadow 0.3s;
+    }
+
+    .chat-card:hover {
+      box-shadow: 0 23px 65px #c88bc52c;
     }
 
     .chat-heading {
-      background: linear-gradient(100deg, #ffd9eb, #e9dcff);
-      padding: 16px 20px;
       display: flex;
       align-items: center;
       gap: 12px;
+      padding: 16px 20px;
+      background: linear-gradient(110deg, #ffd9eb, #e8ddff, #ffe5f2);
+      background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+      border-bottom: 1px solid #f3d3e8;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
     .mini-logo {
-      width: 42px;
-      height: 42px;
-      object-fit: contain;
-      background: #ffffffb8;
-      border-radius: 14px;
+      width: 45px;
+      height: 45px;
       padding: 4px;
+      object-fit: contain;
+      border-radius: 16px;
+      background: #ffffffc9;
+      box-shadow: 0 3px 10px #c18ac52a;
     }
 
     .chat-heading h2 {
       font-size: 16px;
-      color: #8f3e85;
+      color: #984d94;
     }
 
     .chat-heading p {
-      font-size: 12px;
-      color: #8b6b91;
       margin-top: 4px;
+      font-size: 12px;
+      color: #98799d;
+    }
+
+    .sparkle-label {
+      margin-left: auto;
+      font-size: 22px;
+      animation: twinkle 2s infinite;
     }
 
     #messages {
@@ -118,106 +242,183 @@
       padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
       scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #e5b9de transparent;
+    }
+
+    .message-row {
+      display: flex;
+      flex-direction: column;
+      max-width: 90%;
+      gap: 6px;
+      animation: popIn 0.28s ease-out;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .bot-row {
+      align-self: flex-start;
+      align-items: flex-start;
+    }
+
+    .user-row {
+      align-self: flex-end;
+      align-items: flex-end;
     }
 
     .message {
-      max-width: 85%;
-      padding: 12px 15px;
-      border-radius: 18px;
+      padding: 13px 16px;
+      border-radius: 21px;
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.7;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
 
     .bot {
-      align-self: flex-start;
-      background: #f4e9ff;
-      border: 1px solid #e7d4fa;
-      border-bottom-left-radius: 5px;
+      background: linear-gradient(135deg, #f7edff, #fff0f8);
+      border: 1px solid #ead8f6;
+      border-bottom-left-radius: 6px;
     }
 
     .user {
-      align-self: flex-end;
       color: white;
-      background: linear-gradient(135deg, #e86bac, #b783df);
-      border-bottom-right-radius: 5px;
+      background: linear-gradient(135deg, #ef83ba, #b28be7);
+      border: 1px solid #e7a3d6;
+      border-bottom-right-radius: 6px;
+      box-shadow: 0 5px 14px #d78dc02a;
+    }
+
+    .speaker-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid #e9c6e5;
+      border-radius: 22px;
+      padding: 6px 11px;
+      background: #fff8fd;
+      color: #a04f98;
+      font-size: 11px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .speaker-btn:hover {
+      background: #fbe2f3;
+      transform: translateY(-2px);
+    }
+
+    .speaker-btn:active {
+      transform: scale(0.96);
     }
 
     .typing {
-      color: #9876a0;
-      font-size: 12px;
-      padding: 0 20px 10px;
       display: none;
+      padding: 0 20px 13px;
+      color: #9c7ca6;
+      font-size: 12px;
+    }
+
+    .typing span {
+      display: inline-block;
+      animation: typingBounce 0.8s infinite alternate;
+    }
+
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingBounce {
+      to { transform: translateY(-4px); opacity: 0.5; }
+    }
+
+    /* Conversation starters */
+
+    .suggestion-title {
+      padding: 0 17px 9px;
+      color: #a182a9;
+      font-size: 11px;
     }
 
     .suggestions {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      padding: 0 16px 14px;
+      padding: 0 16px 16px;
     }
 
     .suggestions button {
-      border: 1px solid #edc6e3;
-      background: #fff5fb;
-      color: #a34d8e;
-      padding: 8px 12px;
-      border-radius: 20px;
+      border: 1px solid #edc9e5;
+      background: linear-gradient(135deg, #fff8fc, #f7f0ff);
+      color: #a05295;
+      padding: 9px 12px;
+      border-radius: 22px;
       cursor: pointer;
       font-size: 12px;
-      transition: 0.2s;
+      transition: all 0.22s ease;
     }
 
     .suggestions button:hover {
-      background: #f9d9ec;
-      transform: translateY(-1px);
+      background: linear-gradient(135deg, #ffe0ef, #eadeff);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 13px #dca0d92b;
     }
+
+    /* Input */
 
     .input-area {
       display: flex;
+      align-items: center;
       gap: 10px;
-      padding: 15px;
-      border-top: 1px solid #f3dcec;
+      padding: 14px;
       background: #fffaff;
+      border-top: 1px solid #f3dcec;
     }
 
     #userInput {
       min-width: 0;
       flex: 1;
+      padding: 14px 18px;
       border: 1px solid #e8c8e4;
       border-radius: 25px;
-      padding: 13px 17px;
       outline: none;
       font-size: 14px;
       font-family: inherit;
+      color: var(--ink);
       background: white;
-      color: #49344f;
+      transition: box-shadow 0.2s, border 0.2s;
+    }
+
+    #userInput::placeholder {
+      color: #b59ab8;
     }
 
     #userInput:focus {
       border-color: #d76ab1;
-      box-shadow: 0 0 0 3px #f8d8eb;
+      box-shadow: 0 0 0 4px #f8d8eb75;
     }
 
     #sendBtn {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
       border: none;
       border-radius: 50%;
-      width: 47px;
-      height: 47px;
-      flex-shrink: 0;
-      background: linear-gradient(135deg, #ed70b3, #b184e4);
       color: white;
-      font-size: 20px;
+      font-size: 21px;
       cursor: pointer;
-      box-shadow: 0 4px 12px #d57ab444;
-      transition: 0.2s;
+      background: linear-gradient(135deg, #ed70b3, #b184e4);
+      box-shadow: 0 5px 15px #d57ab444;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     #sendBtn:hover {
-      transform: scale(1.06);
+      transform: rotate(-8deg) scale(1.08);
+      box-shadow: 0 7px 18px #d57ab466;
     }
 
     #sendBtn:disabled {
@@ -227,53 +428,71 @@
     }
 
     footer {
+      padding: 23px 10px 8px;
+      color: #997da1;
       text-align: center;
-      color: #96799b;
       font-size: 12px;
-      padding: 22px 10px 8px;
-      line-height: 1.8;
+      line-height: 1.9;
     }
 
     footer strong {
       color: #d64c96;
     }
 
+    .footer-heart {
+      display: inline-block;
+      color: #ec80b7;
+      animation: heartbeat 1.4s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      20% { transform: scale(1.2); }
+      40% { transform: scale(1); }
+    }
+
+    /* Optional motion accessibility */
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
     @media (max-width: 480px) {
-      body {
-        padding: 16px 10px 8px;
-      }
-
-      .logo {
-        width: 82px;
-        height: 82px;
-      }
-
-      #messages {
-        height: 55vh;
-        min-height: 300px;
-        padding: 14px;
-      }
-
-      .message {
-        max-width: 92%;
-      }
-
-      .input-area {
-        padding: 11px;
-      }
+      body { padding: 16px 10px 8px; }
+      .logo { width: 85px; height: 85px; }
+      #messages { height: 52vh; min-height: 300px; padding: 14px; }
+      .message-row { max-width: 95%; }
+      .input-area { padding: 11px; }
+      .chat-card { border-radius: 24px; }
+      .suggestions { gap: 7px; }
     }
   </style>
 </head>
 
 <body>
+  <div class="decorations" aria-hidden="true">
+    <span class="petal">🌸</span>
+    <span class="petal">💗</span>
+    <span class="petal">✨</span>
+    <span class="petal">🌷</span>
+    <span class="petal">💕</span>
+  </div>
+
   <main class="container">
     <header>
-      <img class="logo" src="./blossom-logo.png" alt="Blossom AI logo">
+      <div class="logo-wrap">
+        <img class="logo" src="./blossom-logo.png" alt="Blossom AI logo">
+      </div>
       <h1>Blossom AI 🌸</h1>
       <p class="subtitle">Your AI bestie. Zero chill. Unlimited sass. 💅</p>
       <div class="status">
         <span class="dot"></span>
-        Your chaotic bestie is ready
+        Your chaotic bestie is ready ✨
       </div>
     </header>
 
@@ -284,20 +503,32 @@
           <h2>Blossom 🌷</h2>
           <p>Here for the tea, the drama & the solutions.</p>
         </div>
+        <span class="sparkle-label" aria-hidden="true">✧</span>
       </div>
 
       <div id="messages" aria-live="polite">
-        <div class="message bot">Hey bestieee! 💗 I'm Blossom. Your favourite questionable life decision starts here. 😂🌸
+        <div class="message-row bot-row">
+          <div class="message bot">Hey bestieee! 💗 I'm Blossom. Your favourite questionable life decision starts here. 😂🌸
 
 So, what's the tea? Spill it. 👀</div>
+          <button class="speaker-btn" type="button"
+            data-speak="Hey bestieee! I'm Blossom. Your favourite questionable life decision starts here. So, what's the tea? Spill it.">
+            🔊 Listen to Blossom
+          </button>
+        </div>
       </div>
 
-      <div class="typing" id="typing">Blossom is cooking up a comeback... 💅</div>
+      <div class="typing" id="typing" role="status">
+        Blossom is cooking up a comeback
+        <span>💗</span><span>💗</span><span>💗</span>
+      </div>
+
+      <p class="suggestion-title">♡ Start a conversation, bestie ♡</p>
 
       <div class="suggestions">
         <button type="button" data-message="Roast me, but lovingly.">Roast me 😂</button>
         <button type="button" data-message="I have some drama to share.">Spill the tea 👀</button>
-        <button type="button" data-message="Give me some brutally honest advice.">Be brutally honest 💅</button>
+        <button type="button" data-message="Give me some brutally honest advice.">Be honest 💅</button>
         <button type="button" data-message="I'm bored. Entertain me.">I'm bored 🥹</button>
       </div>
 
@@ -316,13 +547,14 @@ So, what's the tea? Spill it. 👀</div>
     </section>
 
     <footer>
-      Made with 💗 and questionable levels of sass<br>
+      Made with <span class="footer-heart">♥</span> and questionable levels of sass<br>
       by <strong>Shradha Subhadarshini</strong> 🌸
     </footer>
   </main>
 
   <script>
-    const API_URL = "https://blossom-ai-api.thebotblossom.workers.dev/api/chat";
+    const API_URL =
+      "https://blossom-ai-api.thebotblossom.workers.dev/api/chat";
 
     const form = document.getElementById("chatForm");
     const input = document.getElementById("userInput");
@@ -331,21 +563,138 @@ So, what's the tea? Spill it. 👀</div>
     const sendBtn = document.getElementById("sendBtn");
 
     const conversation = [];
+    let activeUtterance = null;
+    let activeSpeakerButton = null;
+
+    function stopSpeech() {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      if (activeSpeakerButton) {
+        activeSpeakerButton.textContent = "🔊 Listen to Blossom";
+        activeSpeakerButton.dataset.active = "false";
+      }
+
+      activeSpeakerButton = null;
+      activeUtterance = null;
+    }
+
+    function speakText(text, button) {
+      if (!("speechSynthesis" in window)) {
+        alert("Sorry bestie! Your browser does not support voice playback.");
+        return;
+      }
+
+      if (
+        activeSpeakerButton === button &&
+        window.speechSynthesis.speaking
+      ) {
+        stopSpeech();
+        return;
+      }
+
+      stopSpeech();
+
+      const cleanText = text
+        .replace(/https?:\/\/\S+/g, "link")
+        .replace(/[*_#`~]/g, "")
+        .replace(/[\u{1F300}-\u{1FAFF}]/gu, "")
+        .trim();
+
+      if (!cleanText) return;
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      const voices = window.speechSynthesis.getVoices();
+
+      const feminineVoiceNames =
+        /samantha|aria|jenny|zira|victoria|karen|moira|tessa|female/i;
+
+      const voice =
+        voices.find(v => feminineVoiceNames.test(v.name) && /^en/i.test(v.lang)) ||
+        voices.find(v => /^en-IN/i.test(v.lang)) ||
+        voices.find(v => /^en/i.test(v.lang));
+
+      if (voice) {
+        utterance.voice = voice;
+        utterance.lang = voice.lang;
+      } else {
+        utterance.lang = "en-IN";
+      }
+
+      utterance.rate = 0.96;
+      utterance.pitch = 1.22;
+      utterance.volume = 1;
+
+      activeUtterance = utterance;
+      activeSpeakerButton = button;
+      button.textContent = "⏹ Stop speaking";
+      button.dataset.active = "true";
+
+      utterance.onend = () => {
+        if (activeUtterance === utterance) {
+          button.textContent = "🔊 Listen to Blossom";
+          button.dataset.active = "false";
+          activeUtterance = null;
+          activeSpeakerButton = null;
+        }
+      };
+
+      utterance.onerror = () => {
+        if (activeUtterance === utterance) {
+          button.textContent = "🔊 Listen to Blossom";
+          button.dataset.active = "false";
+          activeUtterance = null;
+          activeSpeakerButton = null;
+        }
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
 
     function addMessage(text, sender) {
+      const row = document.createElement("div");
+      row.className = "message-row " +
+        (sender === "bot" ? "bot-row" : "user-row");
+
       const bubble = document.createElement("div");
       bubble.className = "message " + sender;
       bubble.textContent = text;
-      messages.appendChild(bubble);
+      row.appendChild(bubble);
+
+      if (sender === "bot") {
+        const speaker = document.createElement("button");
+        speaker.className = "speaker-btn";
+        speaker.type = "button";
+        speaker.textContent = "🔊 Listen to Blossom";
+        speaker.setAttribute("aria-label", "Listen to Blossom's reply");
+
+        speaker.addEventListener("click", () => {
+          speakText(text, speaker);
+        });
+
+        row.appendChild(speaker);
+      }
+
+      messages.appendChild(row);
       messages.scrollTop = messages.scrollHeight;
     }
+
+    // Welcome message speaker button.
+    document.querySelectorAll("[data-speak]").forEach(button => {
+      button.addEventListener("click", () => {
+        speakText(button.dataset.speak, button);
+      });
+    });
 
     async function sendMessage(message) {
       const cleanMessage = message.trim();
 
       if (!cleanMessage || sendBtn.disabled) return;
 
+      stopSpeech();
       addMessage(cleanMessage, "user");
+
       input.value = "";
       sendBtn.disabled = true;
       typing.style.display = "block";
@@ -366,7 +715,9 @@ So, what's the tea? Spill it. 👀</div>
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || "The server had a little meltdown.");
+          throw new Error(
+            data.error || "The server had a little meltdown."
+          );
         }
 
         const reply =
@@ -375,8 +726,8 @@ So, what's the tea? Spill it. 👀</div>
           data.message ||
           data.choices?.[0]?.message?.content;
 
-        if (!reply) {
-          throw new Error("Blossom sent an empty reply. Try again!");
+        if (typeof reply !== "string" || !reply.trim()) {
+          throw new Error("Blossom sent an empty reply.");
         }
 
         conversation.push(
@@ -384,7 +735,6 @@ So, what's the tea? Spill it. 👀</div>
           { role: "assistant", content: reply }
         );
 
-        // Keep recent context so the conversation doesn't grow endlessly.
         if (conversation.length > 20) {
           conversation.splice(0, conversation.length - 20);
         }
@@ -392,6 +742,7 @@ So, what's the tea? Spill it. 👀</div>
         addMessage(reply, "bot");
       } catch (error) {
         console.error("Blossom chat error:", error);
+
         addMessage(
           "Bestie, my brain just tripped over its own shoelaces. 😭💗 Something went wrong connecting to my AI. Try again in a moment.",
           "bot"
@@ -403,16 +754,21 @@ So, what's the tea? Spill it. 👀</div>
       }
     }
 
-    form.addEventListener("submit", function(event) {
+    form.addEventListener("submit", event => {
       event.preventDefault();
       sendMessage(input.value);
     });
 
-    document.querySelectorAll(".suggestions button").forEach(function(button) {
-      button.addEventListener("click", function() {
+    document.querySelectorAll(".suggestions button").forEach(button => {
+      button.addEventListener("click", () => {
         sendMessage(button.dataset.message);
       });
     });
+
+    // Load available voices when the browser provides them.
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.getVoices();
+    }
   </script>
 </body>
 </html>
