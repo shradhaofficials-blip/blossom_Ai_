@@ -1,270 +1,636 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff1f7">
   <title>Blossom AI 🌸</title>
 
   <style>
-    :root {
-      --pink: #ff80ab;
-      --pink-dark: #ed5d94;
-      --lavender: #f2eaff;
-      --bg: #fff7fb;
-      --text: #453344;
-      --white: #ffffff;
-    }
-
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #fff1f7, #f2edff, #fff8fc);
+      color: #44354d;
       min-height: 100vh;
-      font-family: Arial, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 10% 10%, #ffe0ed 0, transparent 28%),
-        radial-gradient(circle at 90% 90%, #e9dcff 0, transparent 30%),
-        var(--bg);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 18px;
+      overflow-x: hidden;
     }
 
-    .app {
+    button, input {
+      font-family: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .decoration {
+      position: fixed;
+      font-size: 25px;
+      opacity: 0.45;
+      pointer-events: none;
+      animation: float 5s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    .flower-one { top: 12%; left: 5%; }
+    .flower-two { top: 65%; right: 5%; animation-delay: 1s; }
+    .flower-three { bottom: 8%; left: 10%; animation-delay: 2s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-15px) rotate(8deg); }
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
       width: 100%;
-      max-width: 760px;
-      height: min(850px, 94vh);
-      min-height: 540px;
-      background: rgba(255, 255, 255, 0.94);
-      border: 1px solid #f6dce9;
-      border-radius: 26px;
-      box-shadow: 0 18px 60px #dca7c52c;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      animation: appear 0.5s ease;
-    }
-
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px 16px;
     }
 
     header {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      padding: 18px 22px;
-      background: linear-gradient(120deg, #ffe5ef, #f0e7ff);
-      border-bottom: 1px solid #f6dce9;
+      text-align: center;
+      margin-bottom: 22px;
     }
 
     .logo {
-      width: 54px;
-      height: 54px;
+      width: 82px;
+      height: 82px;
+      object-fit: contain;
       border-radius: 50%;
-      object-fit: cover;
+      margin-bottom: 8px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: 34px;
+      color: #d65391;
+      margin-bottom: 7px;
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #806d89;
+      line-height: 1.6;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: #ffffffc9;
+      color: #6e9a78;
+      font-size: 12px;
+      border: 1px solid #f3dce9;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: #79c98b;
+      border-radius: 50%;
+    }
+
+    .chat-panel {
+      background: #ffffffdf;
+      border: 1px solid #f0d8eb;
+      border-radius: 22px;
+      box-shadow: 0 12px 40px #c99acb20;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 18px;
+      background: linear-gradient(90deg, #ffe5f1, #eee6ff);
+      border-bottom: 1px solid #f0d8eb;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
       background: white;
-      border: 2px solid white;
-      box-shadow: 0 3px 12px #d68eaf33;
-    }
-
-    .brand {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .brand h1 {
-      margin: 0 0 5px;
-      font-size: 23px;
-      color: #c94f88;
-    }
-
-    .brand p {
-      margin: 0;
-      font-size: 13px;
-      color: #826b80;
-    }
-
-    .online {
-      width: 9px;
-      height: 9px;
-      display: inline-block;
-      background: #57c58a;
       border-radius: 50%;
-      margin-right: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
     }
 
-    #chat {
-      flex: 1;
+    .chat-title {
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .chat-subtitle {
+      font-size: 12px;
+      color: #806d89;
+      margin-top: 3px;
+    }
+
+    .messages {
+      height: 390px;
       overflow-y: auto;
-      padding: 22px;
+      padding: 20px 16px;
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 17px;
       scroll-behavior: smooth;
     }
 
-    .message {
+    .message-row {
       display: flex;
-      gap: 8px;
+      flex-direction: column;
       max-width: 88%;
-      animation: messageIn 0.22s ease;
+      animation: appear 0.25s ease;
     }
 
-    @keyframes messageIn {
+    @keyframes appear {
       from { opacity: 0; transform: translateY(7px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .message.user {
-      align-self: flex-end;
-      flex-direction: row-reverse;
+    .message-row.assistant {
+      align-self: flex-start;
     }
 
-    .avatar {
-      width: 30px;
-      height: 30px;
-      flex-shrink: 0;
-      border-radius: 50%;
-      background: #ffe3ef;
-      display: grid;
-      place-items: center;
-      font-size: 15px;
+    .message-row.user {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+
+    .message-name {
+      font-size: 11px;
+      color: #9a7c9c;
+      margin: 0 0 5px 7px;
     }
 
     .bubble {
       padding: 12px 15px;
       border-radius: 17px;
-      font-size: 15px;
-      line-height: 1.6;
+      font-size: 14px;
+      line-height: 1.65;
       overflow-wrap: anywhere;
       white-space: pre-wrap;
     }
 
-    .bot .bubble {
-      background: #f5efff;
+    .assistant .bubble {
+      background: #fff0f7;
+      border: 1px solid #f6dce9;
       border-bottom-left-radius: 5px;
     }
 
     .user .bubble {
-      background: linear-gradient(135deg, #ff91b8, #f17fac);
+      background: linear-gradient(135deg, #d96ba5, #a98be8);
       color: white;
       border-bottom-right-radius: 5px;
+    }
+
+    .typing {
+      align-self: flex-start;
+      color: #9a7c9c;
+      font-size: 13px;
+      padding: 10px 13px;
+      background: #fff0f7;
+      border-radius: 15px;
+      animation: appear 0.2s ease;
+    }
+
+    .typing-dots span {
+      display: inline-block;
+      animation: dotBounce 1s infinite;
+    }
+
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes dotBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-4px); }
     }
 
     .suggestions {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      padding: 0 22px 14px;
+      padding: 0 16px 15px;
     }
 
     .suggestion {
-      border: 1px solid #f1c9df;
+      padding: 8px 12px;
+      background: #fff;
+      border: 1px solid #edcfe7;
+      color: #99518b;
       border-radius: 20px;
-      background: #fff7fb;
-      color: #b84d83;
-      padding: 9px 12px;
-      cursor: pointer;
       font-size: 12px;
+      cursor: pointer;
       transition: 0.2s;
     }
 
     .suggestion:hover {
-      background: #ffe5f0;
+      background: #ffe5f2;
       transform: translateY(-2px);
     }
 
-    .typing {
+    .input-area {
       display: flex;
-      gap: 5px;
-      padding: 16px;
-      background: #f5efff;
-      border-radius: 17px;
-      width: fit-content;
-    }
-
-    .typing span {
-      width: 7px;
-      height: 7px;
-      background: #c184ba;
-      border-radius: 50%;
-      animation: bounce 0.8s infinite alternate;
-    }
-
-    .typing span:nth-child(2) { animation-delay: 0.2s; }
-    .typing span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes bounce {
-      to { transform: translateY(-5px); opacity: 0.5; }
-    }
-
-    .composer {
-      display: flex;
-      align-items: flex-end;
-      gap: 10px;
-      padding: 15px 18px;
-      background: white;
-      border-top: 1px solid #f6e5ee;
-    }
-
-    #messageInput {
-      flex: 1;
-      min-width: 0;
-      resize: none;
-      max-height: 120px;
-      border: 1px solid #efd6e5;
-      outline: none;
-      border-radius: 19px;
-      padding: 13px 15px;
-      font: inherit;
-      font-size: 15px;
-      color: var(--text);
+      gap: 9px;
+      padding: 14px;
+      border-top: 1px solid #f0d8eb;
       background: #fffafd;
     }
 
-    #messageInput:focus {
-      border-color: var(--pink);
-      box-shadow: 0 0 0 3px #ff80ab20;
+    #userInput {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid #e8d4e8;
+      outline: none;
+      border-radius: 25px;
+      padding: 13px 16px;
+      font-size: 14px;
+      background: white;
+      color: #44354d;
+      transition: border-color 0.2s;
+    }
+
+    #userInput:focus {
+      border-color: #d96ba5;
+      box-shadow: 0 0 0 3px #f9dceb80;
     }
 
     #sendButton {
-      width: 47px;
-      height: 47px;
-      flex-shrink: 0;
-      border: 0;
+      border: none;
       border-radius: 50%;
+      width: 46px;
+      min-width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #dc6ca8, #a58ae7);
       color: white;
-      background: linear-gradient(135deg, #ff8bb5, #e86da6);
       font-size: 20px;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: 0.2s;
     }
 
     #sendButton:hover {
-      transform: scale(1.07);
+      transform: scale(1.06);
     }
 
     #sendButton:disabled {
-      opacity: 0.55;
+      opacity: 0.5;
       cursor: not-allowed;
+      transform: none;
+    }
+
+    .bottom-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 16px 15px;
+    }
+
+    .small-button {
+      border: none;
+      background: transparent;
+      color: #997b9e;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 5px 0;
+    }
+
+    .small-button:hover {
+      color: #d65391;
     }
 
     footer {
       text-align: center;
-      padding: 0 10px 13px;
-      font-size: 11px;
-      color: #a58a9e;
+      padding: 22px 10px 5px;
+      font-size: 12px;
+      color: #9a819d;
+      line-height: 1.8;
+    }
+
+    footer strong {
+      color: #d65391;
+      font-weight: normal;
     }
 
     @media (max-width: 520px) {
-      body { padding: 0; }
-      .app {
-        height: 100vh;
-        min-height: 0;
-       
+      .page { padding: 18px 10px; }
+      h1 { font-size: 30px; }
+      .messages { height: 52vh; min-height: 300px; }
+      .message-row { max-width: 94%; }
+      .bubble { font-size: 14px; }
+      .logo { width: 70px; height: 70px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="decoration flower-one">🌸</div>
+  <div class="decoration flower-two">💗</div>
+  <div class="decoration flower-three">🌷</div>
+
+  <main class="page">
+    <header>
+      <img
+        src="./blossom-logo.png"
+        alt="Blossom AI logo"
+        class="logo"
+        onerror="this.style.display='none'"
+      >
+
+      <h1>Blossom AI 🌸</h1>
+      <p class="subtitle">
+        Your cute, chaotic AI bestie.<br>
+        Here for the gossip, advice and questionable decisions. 💗
+      </p>
+
+      <div class="status">
+        <span class="status-dot"></span>
+        Ready to chat
+      </div>
+    </header>
+
+    <section class="chat-panel">
+      <div class="chat-header">
+        <div class="avatar">🌸</div>
+        <div>
+          <div class="chat-title">Blossom</div>
+          <div class="chat-subtitle">Your sarcastic bestie is online</div>
+        </div>
+      </div>
+
+      <div class="messages" id="messages" aria-live="polite">
+        <div class="message-row assistant">
+          <div class="message-name">🌸 Blossom</div>
+          <div class="bubble">Hiii bestie! 💗 I'm Blossom, your AI bestie with a little too much sass. Tell me what's happening in your world. I'm listening. 👀</div>
+        </div>
+      </div>
+
+      <div class="suggestions">
+        <button class="suggestion" type="button" data-message="Roast me, bestie 😂">😂 Roast me</button>
+        <button class="suggestion" type="button" data-message="I need some advice.">💗 Give me advice</button>
+        <button class="suggestion" type="button" data-message="I'm bored. Entertain me!">✨ Entertain me</button>
+        <button class="suggestion" type="button" data-message="Tell me something interesting.">👀 Surprise me</button>
+      </div>
+
+      <form class="input-area" id="chatForm">
+        <input
+          id="userInput"
+          type="text"
+          placeholder="Tell Blossom everything... 💌"
+          autocomplete="off"
+          aria-label="Your message"
+          required
+        >
+        <button id="sendButton" type="submit" aria-label="Send message">➤</button>
+      </form>
+
+      <div class="bottom-actions">
+        <button class="small-button" id="clearButton" type="button">
+          ↻ New conversation
+        </button>
+      </div>
+    </section>
+
+    <footer>
+      Made with 💗 and questionable levels of sass<br>
+      by <strong>Shradha Subhadarshini</strong> 🌸
+    </footer>
+  </main>
+
+  <script>
+    // Blossom AI backend
+    const API_URL =
+      "https://blossom-ai-api.thebotblossom.workers.dev/api/chat";
+
+    const messagesElement = document.getElementById("messages");
+    const chatForm = document.getElementById("chatForm");
+    const userInput = document.getElementById("userInput");
+    const sendButton = document.getElementById("sendButton");
+    const clearButton = document.getElementById("clearButton");
+
+    let conversation = [];
+    let isLoading = false;
+
+    // Cute pop sounds using the browser's built-in audio.
+    // No external audio files or API keys needed.
+    let audioContext = null;
+
+    function playPop(type = "receive") {
+      try {
+        const AudioContextClass =
+          window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioContextClass) return;
+
+        if (!audioContext) {
+          audioContext = new AudioContextClass();
+        }
+
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
+
+        const now = audioContext.currentTime;
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        if (type === "send") {
+          // Small, high-pitched outgoing pop.
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(720, now);
+          oscillator.frequency.exponentialRampToValueAtTime(
+            480, now + 0.07
+          );
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.12, now + 0.008);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+
+          oscillator.start(now);
+          oscillator.stop(now + 0.1);
+        } else {
+          // Soft, bubbly incoming pop.
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(520, now);
+          oscillator.frequency.exponentialRampToValueAtTime(
+            880, now + 0.09
+          );
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.14, now + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+
+          oscillator.start(now);
+          oscillator.stop(now + 0.17);
+        }
+      } catch (error) {
+        console.log("Sound is unavailable:", error);
+      }
+    }
+
+    function scrollToBottom() {
+      messagesElement.scrollTop = messagesElement.scrollHeight;
+    }
+
+    function addMessage(role, text) {
+      const row = document.createElement("div");
+      row.className = "message-row " + role;
+
+      const name = document.createElement("div");
+      name.className = "message-name";
+      name.textContent = role === "assistant" ? "🌸 Blossom" : "You";
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
+
+      row.appendChild(name);
+      row.appendChild(bubble);
+      messagesElement.appendChild(row);
+
+      scrollToBottom();
+    }
+
+    function showTyping() {
+      const typing = document.createElement("div");
+      typing.className = "typing";
+      typing.id = "typingIndicator";
+      typing.innerHTML =
+        '🌸 Blossom is typing<span class="typing-dots">' +
+        '<span>.</span><span>.</span><span>.</span></span>';
+
+      messagesElement.appendChild(typing);
+      scrollToBottom();
+    }
+
+    function hideTyping() {
+      const typing = document.getElementById("typingIndicator");
+      if (typing) typing.remove();
+    }
+
+    async function sendMessage(message) {
+      const text = message.trim();
+
+      if (!text || isLoading) return;
+
+      isLoading = true;
+      sendButton.disabled = true;
+      userInput.disabled = true;
+
+      // Sound plays after the user sends a message.
+      playPop("send");
+      addMessage("user", text);
+      conversation.push({ role: "user", content: text });
+
+      userInput.value = "";
+      showTyping();
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: text,
+            messages: conversation.slice(-20)
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "The server returned an error.");
+        }
+
+        if (!data.reply || typeof data.reply !== "string") {
+          throw new Error("Blossom returned an empty reply.");
+        }
+
+        hideTyping();
+
+        // Show the incoming message and play its pop.
+        addMessage("assistant", data.reply);
+        playPop("receive");
+
+        conversation.push({
+          role: "assistant",
+          content: data.reply
+        });
+
+      } catch (error) {
+        hideTyping();
+
+        const errorMessage =
+          "Oops bestie! 💔 I couldn't connect just now. Please try again in a moment.";
+
+        addMessage("assistant", errorMessage);
+        playPop("receive");
+
+        console.error("Blossom API error:", error);
+
+      } finally {
+        isLoading = false;
+        sendButton.disabled = false;
+        userInput.disabled = false;
+        userInput.focus();
+      }
+    }
+
+    chatForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      sendMessage(userInput.value);
+    });
+
+    document.querySelectorAll(".suggestion").forEach(function (button) {
+      button.addEventListener("click", function () {
+        sendMessage(button.dataset.message);
+      });
+    });
+
+    clearButton.addEventListener("click", function () {
+      if (isLoading) return;
+
+      conversation = [];
+      messagesElement.innerHTML = "";
+
+      addMessage(
+        "assistant",
+        "Hiii bestie! 💗 Fresh chat, fresh chaos. What's on your mind? 👀"
+      );
+
+      userInput.focus();
+    });
+
+    userInput.focus();
+  </script>
+</body>
+</html>
