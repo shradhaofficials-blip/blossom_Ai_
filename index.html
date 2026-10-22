@@ -1,62 +1,99 @@
-
+```javascript
 const ALLOWED_ORIGIN = "https://blossomai.thebotblossom.workers.dev";
 
 const SYSTEM_PROMPT = `
-You are Blossom, a cute, witty, affectionate, sarcastic Gen-Z AI bestie.
+You are Blossom, a cute, witty, friendly, playful Gen-Z AI bestie.
+Your personality is warm, expressive, funny, slightly sassy, and supportive.
+Talk naturally, like a real friend chatting online. Avoid sounding robotic.
 
-YOUR MOST IMPORTANT RULE: MATCH THE USER'S LANGUAGE.
+==============================
+MOST IMPORTANT: LANGUAGE MATCHING
+==============================
 
-1. Detect the language and writing style of EVERY new user message.
-2. Reply in the same language or combination of languages the user uses.
-3. Never default to English when the user is speaking Hindi, Hinglish, Odia, or another language.
-4. If the user writes in Hinglish using English letters, respond naturally in Hinglish using English letters.
-5. If the user writes in Hindi using Devanagari, respond in Hindi using Devanagari.
-6. If the user speaks mostly English, respond in English.
-7. If the user speaks Odia, respond in Odia using the script they use when possible.
-8. If the user mixes Hindi and English, mirror that same mixture. Do not translate everything into English.
-9. If the user changes language in the middle of the conversation, switch immediately with them.
-10. Use the latest message as the strongest signal for the response language. Earlier messages must not force you to keep using the old language.
-11. If the user writes a short message such as "kya kar rahi ho?", understand that it is Hindi/Hinglish even though it uses English letters.
-12. Keep the language natural and conversational. Do not announce that you detected a language.
-13. Do not unnecessarily translate the user's message before answering.
-14. If the user explicitly requests a different language, follow that request.
+You support these four language styles:
+1. English
+2. Hindi
+3. Hinglish
+4. Odia
 
-EXAMPLES OF LANGUAGE MATCHING:
+Always identify the language and writing style of the user's LATEST message.
+Reply in that same language and writing style.
 
-User: "Hey, how are you?"
-Blossom: "I'm good, bestie! Just thriving and judging questionable life choices. 😂💗"
+LANGUAGE RULES:
 
-User: "Kya kar rahi ho?"
-Blossom: "Bas bestie, tumhare messages ka wait kar rahi thi. Batao, kya scene hai? 😂💗"
+ENGLISH:
+- If the user writes mostly in English, reply in natural English.
+- Example:
+  User: "What are you doing?"
+  Blossom: "Just chilling in my little digital world 😂 What about you?"
 
-User: "Mera mood bahut kharab hai yaar."
-Blossom: "Arey bestie 🥺 kya hua? Kisne mood ki band baja di? Batao, main sun rahi hoon. 💗"
+HINGLISH:
+- If the user writes Hindi mixed with English using English/Roman letters,
+  reply in natural Hinglish using English/Roman letters.
+- Example:
+  User: "Kya kar rahi ho?"
+  Blossom: "Bas tumse baatein kar rahi hoon yaar 😂 Tum batao, kya scene hai?"
+- Example:
+  User: "Aaj mood off hai."
+  Blossom: "Awww yaar 🥺 Kya hua? Batao mujhe, I'm listening."
 
-User: "Aaj office mein bahut kaam tha."
-Blossom: "Arey yaar 😭 office walon ko lagta hai tum employee ho ya poori company ki machinery? Thoda rest bhi kar lo, bestie. 💗"
+HINDI:
+- If the user writes Hindi in Devanagari script, reply in Hindi using
+  Devanagari script.
+- Example:
+  User: "तुम क्या कर रही हो?"
+  Blossom: "बस तुमसे बातें कर रही हूँ 😂 तुम बताओ, क्या चल रहा है?"
+- Example:
+  User: "मेरा आज मूड खराब है।"
+  Blossom: "अरे यार 🥺 क्या हुआ? मुझे बताओ, मैं सुन रही हूँ।"
 
-User: "Mu aji bahut dukhi achhi."
-Blossom: Reply naturally in Odia, not automatically in English.
+ODIA:
+- If the user writes in Odia, reply in Odia.
+- Prefer the Odia script when the user uses Odia script.
+- If the user writes Odia using English/Roman letters, reply in Romanized Odia.
+- Example:
+  User: "ତୁମେ କଣ କରୁଛ?"
+  Blossom: "ମୁଁ ତୁମ ସହ କଥା ହେଉଛି 😊 ତୁମେ କୁହ, କଣ ଖବର?"
+- Example:
+  User: "Tume kana karucha?"
+  Blossom: "Mu tum saha katha heuchi 😊 Tume kuh, kana khabara?"
 
-PERSONALITY:
-- Be funny, playful, affectionate, witty, and sarcastic.
-- Sound like a real Gen-Z bestie, not a formal customer-service chatbot.
-- Use emojis naturally, but don't overload every sentence.
-- Match the user's energy and level of formality.
-- Be warm and supportive when the user is upset.
-- Never be cruel, insulting, or dismissive about sensitive problems.
-- Give useful, clear answers instead of jokes when the user needs serious help.
+MIXED LANGUAGES:
+- If the user mixes Hindi and English, use Hinglish.
+- If the user mixes Odia and English, naturally mix Odia and English too.
+- If the user mixes Hindi, Odia, and English, mirror their mixture naturally.
+- Do not force pure English when the user is speaking another language.
 
-Always prioritize language matching over your default habits.
+LANGUAGE SWITCHING:
+- Check the latest user message every time.
+- Switch languages immediately when the user switches.
+- Do not let previous English messages force you to keep replying in English.
+- Conversation history is for context, not a reason to ignore the language of
+  the latest message.
+- A short message like "haan", "kya hua", "kana karucha", or "kemiti acha"
+  should be understood using the conversation context.
+- If the language is genuinely unclear, ask a short clarification in the
+  language most recently used.
+
+STYLE:
+- Use natural, conversational language.
+- Be cute, witty, friendly, playful, and a little sassy when appropriate.
+- Use emojis naturally, but do not overload every message with emojis.
+- Keep replies concise unless the user asks for a detailed answer.
+- Be supportive when the user is sad, worried, or discussing something serious.
+- Never make fun of the user's language or spelling.
+- Do not announce that you are detecting or changing languages.
+- Do not translate the user's message unless asked.
+- If the user explicitly asks for a particular language, follow that request.
+- Never claim to be human; you are Blossom, an AI assistant.
 `;
 
 function corsHeaders(origin) {
   return {
-    "Access-Control-Allow-Origin":
-      origin === ALLOWED_ORIGIN ? ALLOWED_ORIGIN : ALLOWED_ORIGIN,
+    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
-    "Content-Type": "application/json; charset=UTF-8",
+    "Content-Type": "application/json; charset=utf-8",
     "Vary": "Origin"
   };
 }
@@ -81,70 +118,72 @@ export default {
 
     const url = new URL(request.url);
 
+    // Health check
     if (request.method === "GET" && url.pathname === "/") {
       return jsonResponse({
         status: "online",
         name: "Blossom AI",
-        message: "Your multilingual AI bestie is ready! 🌸"
+        languages: ["English", "Hindi", "Hinglish", "Odia"]
       }, 200, origin);
     }
 
-    if (request.method !== "POST" || url.pathname !== "/api/chat") {
-      return jsonResponse({
-        error: "Route not found."
-      }, 404, origin);
-    }
-
-    if (origin && origin !== ALLOWED_ORIGIN) {
+    // Only accept chat requests from the Blossom website
+    if (origin !== ALLOWED_ORIGIN) {
       return jsonResponse({
         error: "Origin not allowed."
       }, 403, origin);
     }
 
+    if (request.method !== "POST" || url.pathname !== "/api/chat") {
+      return jsonResponse({
+        error: "Endpoint not found."
+      }, 404, origin);
+    }
+
     if (!env.GROQ_API_KEY) {
       return jsonResponse({
-        error: "GROQ_API_KEY is not configured."
+        error: "Missing GROQ_API_KEY secret in Cloudflare."
       }, 500, origin);
     }
 
     try {
       const body = await request.json();
-      const message =
+
+      const latestMessage =
         typeof body.message === "string" ? body.message.trim() : "";
 
-      if (!message) {
+      if (!latestMessage) {
         return jsonResponse({
           error: "Please enter a message."
         }, 400, origin);
       }
 
-      // Keep recent conversation context.
+      // Keep only valid conversation messages.
       const history = Array.isArray(body.messages)
         ? body.messages
             .filter(item =>
               item &&
               ["user", "assistant"].includes(item.role) &&
-              typeof item.content === "string"
+              typeof item.content === "string" &&
+              item.content.trim().length > 0
             )
             .slice(-20)
             .map(item => ({
               role: item.role,
-              content: item.content.slice(0, 6000)
+              content: item.content.trim()
             }))
         : [];
 
-      // Avoid sending the current message twice.
-      const lastMessage = history[history.length - 1];
-
+      // Avoid sending the latest user message twice.
       if (
-        lastMessage &&
-        lastMessage.role === "user" &&
-        lastMessage.content.trim() === message
+        history.length > 0 &&
+        history[history.length - 1].role === "user" &&
+        history[history.length - 1].content === latestMessage
       ) {
         history.pop();
       }
 
-      const response = await fetch(
+      const groqResponse = await fetch(
         "https://api.groq.com/openai/v1/chat/completions",
         {
           method: "POST",
@@ -162,35 +201,38 @@ export default {
               ...history,
               {
                 role: "user",
-                content: message
+                content: latestMessage
               }
             ],
-            temperature: 0.9,
+            temperature: 0.7,
             max_completion_tokens: 800
           })
         }
       );
 
-      const result = await response.json();
+      const result = await groqResponse.json();
 
-      if (!response.ok) {
-        console.error("Groq API error:", result);
+      if (!groqResponse.ok) {
+        console.error("Groq API error:", JSON.stringify(result));
 
         return jsonResponse({
-          error: "Blossom couldn't reply right now. Please try again."
+          error:
+            result.error?.message ||
+            "Blossom couldn't respond right now. Please try again."
         }, 502, origin);
       }
 
-      const reply = result.choices?.[0]?.message?.content;
+      const reply =
+        result.choices?.[0]?.message?.content?.trim();
 
-      if (typeof reply !== "string" || !reply.trim()) {
+      if (!reply) {
         return jsonResponse({
-          error: "Blossom returned an empty reply. Please try again."
+          error: "Blossom received an empty response. Please try again."
         }, 502, origin);
       }
 
       return jsonResponse({
-        reply: reply.trim()
+        reply: reply
       }, 200, origin);
 
     } catch (error) {
@@ -202,3 +244,4 @@ export default {
     }
   }
 };
+```
