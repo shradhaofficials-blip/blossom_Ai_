@@ -3,153 +3,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blossom AI 🌸</title>
   <style>
+    * { box-sizing: border-box; }
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #fff0f6, #eee7ff);
-      color: #392744;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
+      margin: 0; font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fff0f6, #f2eaff);
+      color: #382b3b; min-height: 100vh;
+      display: flex; justify-content: center; align-items: center;
       padding: 16px;
-      box-sizing: border-box;
     }
     .app {
-      width: 100%;
-      max-width: 600px;
-      height: 80vh;
-      min-height: 450px;
-      background: white;
-      border-radius: 22px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 10px 35px #9870a52b;
+      width: 100%; max-width: 720px; height: 85vh; min-height: 480px;
+      background: #ffffff; border-radius: 22px; overflow: hidden;
+      box-shadow: 0 12px 40px #aa83b533;
+      display: flex; flex-direction: column;
     }
     header {
-      background: #f8e8ff;
-      padding: 20px;
-      text-align: center;
+      padding: 20px; background: #f9d9e8;
+      display: flex; align-items: center; gap: 12px;
     }
-    h1 { margin: 0 0 6px; color: #a14dbb; }
-    header p { margin: 0; font-size: 14px; }
+    .flower { font-size: 34px; }
+    h1 { margin: 0; font-size: 23px; }
+    header p { margin: 5px 0 0; font-size: 13px; color: #725c70; }
     #chat {
-      flex: 1;
-      overflow-y: auto;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      flex: 1; overflow-y: auto; padding: 20px;
+      display: flex; flex-direction: column; gap: 14px;
     }
-    .bubble {
-      max-width: 85%;
-      padding: 12px 15px;
-      border-radius: 17px;
-      white-space: pre-wrap;
+    .message {
+      padding: 12px 15px; border-radius: 16px;
+      max-width: 85%; white-space: pre-wrap; line-height: 1.5;
       overflow-wrap: anywhere;
-      line-height: 1.5;
     }
-    .bot { background: #f5edfa; align-self: flex-start; }
-    .user {
-      background: #ad60c5;
-      color: white;
-      align-self: flex-end;
-    }
-    form {
-      display: flex;
-      gap: 8px;
-      padding: 12px;
-      border-top: 1px solid #eee5f2;
+    .bot { background: #f7eaf8; align-self: flex-start; }
+    .user { background: #dce9ff; align-self: flex-end; }
+    .composer {
+      display: flex; gap: 9px; padding: 15px;
+      border-top: 1px solid #f0e7f0;
     }
     input {
-      flex: 1;
-      min-width: 0;
-      border: 1px solid #dfcce7;
-      border-radius: 22px;
-      padding: 12px;
-      font-size: 16px;
+      min-width: 0; flex: 1; border: 1px solid #e1d4e5;
+      border-radius: 25px; padding: 13px 16px; font-size: 15px;
+      outline-color: #d78bb7;
     }
     button {
-      background: #a653c2;
-      color: white;
-      border: 0;
-      border-radius: 22px;
-      padding: 0 18px;
+      border: 0; border-radius: 25px; background: #d86ba4;
+      color: white; font-weight: bold; padding: 0 20px;
       cursor: pointer;
     }
-    button:disabled { opacity: .6; }
-    footer {
-      text-align: center;
-      color: #87788e;
-      font-size: 11px;
-      padding: 0 10px 10px;
+    button:disabled { opacity: .6; cursor: wait; }
+    footer { text-align: center; padding: 0 10px 12px; color: #917d91; font-size: 11px; }
+    @media(max-width: 480px) {
+      .app { height: 90vh; }
+      header { padding: 15px; }
+      #chat { padding: 14px; }
+      .message { max-width: 92%; }
     }
   </style>
 </head>
 <body>
   <main class="app">
     <header>
-      <h1>🌸 Blossom AI</h1>
-      <p>Your witty, multilingual AI bestie 💜</p>
+      <div class="flower">🌸</div>
+      <div>
+        <h1>Blossom AI</h1>
+        <p>Your witty, slightly chaotic AI bestie ✨</p>
+      </div>
     </header>
 
     <section id="chat" aria-live="polite">
-      <div class="bubble bot">
-        Ohooo, finally! 😏 Welcome to Blossom.
-        English, Hindi, Hinglish, Odia or Bhojpuri?
-        Pick your drama, bestie. 🌸
-      </div>
+      <div class="message bot">Hey bestie! 🌸 I'm Blossom. English, Hindi, Hinglish, Odia, Bhojpuri—bring it on. What's happening in that brain of yours? 👀</div>
     </section>
 
-    <form id="form">
-      <input id="message" placeholder="Roast me, help me, anything..." maxlength="4000" required>
-      <button id="send" type="submit">Send</button>
+    <form class="composer" id="form">
+      <input id="message" placeholder="Say something, bestie..." autocomplete="off" required>
+      <button id="send" type="submit">Send ➤</button>
     </form>
-    <footer>Blossom can make mistakes. Keep your passwords private.</footer>
+    <footer>Blossom AI · Be nice-ish 💗</footer>
   </main>
 
   <script>
+    const API_URL = "https://blossom-ai-api.thebotblossom.workers.dev/api/chat";
     const chat = document.getElementById("chat");
     const form = document.getElementById("form");
     const input = document.getElementById("message");
     const send = document.getElementById("send");
+    const history = [];
 
-    function addBubble(text, type) {
-      const el = document.createElement("div");
-      el.className = "bubble " + type;
-      el.textContent = text;
-      chat.appendChild(el);
+    function addMessage(text, role) {
+      const div = document.createElement("div");
+      div.className = "message " + (role === "user" ? "user" : "bot");
+      div.textContent = text;
+      chat.appendChild(div);
       chat.scrollTop = chat.scrollHeight;
-      return el;
     }
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const message = input.value.trim();
-      if (!message || send.disabled) return;
+      if (!message) return;
 
-      addBubble(message, "user");
+      addMessage(message, "user");
       input.value = "";
       send.disabled = true;
-      const reply = addBubble("Blossom is thinking... 🌸", "bot");
+      send.textContent = "...";
 
       try {
-        const response = await fetch("/api/chat", {
+        const response = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
+          body: JSON.stringify({ message, history })
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "Request failed");
-        reply.textContent = data.reply || "Bestie, my brain just lagged. 😂";
-      } catch {
-        reply.textContent =
-          "Oops! My brain cells aren't connected yet. We'll fix that soon! 🌷";
+        const reply = data.reply || "My brain cells took a coffee break. Try again?";
+        addMessage(reply, "assistant");
+        history.push({ role: "user", content: message });
+        history.push({ role: "assistant", content: reply });
+        if (history.length > 16) history.splice(0, history.length - 16);
+      } catch (error) {
+        addMessage("Oops! I couldn't reach my AI brain. " + error.message +
+          " — this may be a connection setting we need to fix.", "assistant");
       } finally {
         send.disabled = false;
+        send.textContent = "Send ➤";
         input.focus();
       }
     });
