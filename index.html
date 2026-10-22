@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff1f7">
   <title>Blossom AI 🌸</title>
 
   <style>
@@ -25,13 +26,17 @@
       font-family: inherit;
     }
 
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     .decoration {
       position: fixed;
       font-size: 25px;
       opacity: 0.45;
       pointer-events: none;
       animation: float 5s ease-in-out infinite;
-      z-index: -1;
+      z-index: 0;
     }
 
     .flower-one { top: 12%; left: 5%; }
@@ -44,6 +49,8 @@
     }
 
     .page {
+      position: relative;
+      z-index: 1;
       width: 100%;
       max-width: 850px;
       margin: 0 auto;
@@ -98,7 +105,7 @@
     }
 
     .chat-panel {
-      background: #ffffffd9;
+      background: #ffffffdf;
       border: 1px solid #f0d8eb;
       border-radius: 22px;
       box-shadow: 0 12px 40px #c99acb20;
@@ -195,29 +202,6 @@
       border-bottom-right-radius: 5px;
     }
 
-    .listen-button {
-      align-self: flex-start;
-      margin: 7px 0 0 3px;
-      padding: 6px 10px;
-      border: 1px solid #e8cbe7;
-      background: white;
-      color: #a24d8a;
-      border-radius: 18px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .listen-button:hover {
-      background: #fce6f4;
-      transform: translateY(-1px);
-    }
-
-    .listen-button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
     .typing {
       align-self: flex-start;
       color: #9a7c9c;
@@ -225,6 +209,20 @@
       padding: 10px 13px;
       background: #fff0f7;
       border-radius: 15px;
+      animation: appear 0.2s ease;
+    }
+
+    .typing-dots span {
+      display: inline-block;
+      animation: dotBounce 1s infinite;
+    }
+
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes dotBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-4px); }
     }
 
     .suggestions {
@@ -301,8 +299,7 @@
 
     .bottom-actions {
       display: flex;
-      justify-content: space-between;
-      gap: 10px;
+      justify-content: flex-end;
       padding: 0 16px 15px;
     }
 
@@ -390,7 +387,6 @@
         <div class="message-row assistant">
           <div class="message-name">🌸 Blossom</div>
           <div class="bubble">Hiii bestie! 💗 I'm Blossom, your AI bestie with a little too much sass. Tell me what's happening in your world. I'm listening. 👀</div>
-          <button class="listen-button" type="button">🔊 Listen to Blossom</button>
         </div>
       </div>
 
@@ -414,8 +410,9 @@
       </form>
 
       <div class="bottom-actions">
-        <button class="small-button" id="clearButton" type="button">↻ New conversation</button>
-        <button class="small-button" id="stopVoiceButton" type="button">🔇 Stop voice</button>
+        <button class="small-button" id="clearButton" type="button">
+          ↻ New conversation
+        </button>
       </div>
     </section>
 
@@ -426,7 +423,7 @@
   </main>
 
   <script>
-    // Blossom AI backend. Keep your existing backend URL.
+    // Blossom AI backend
     const API_URL =
       "https://blossom-ai-api.thebotblossom.workers.dev/api/chat";
 
@@ -435,14 +432,69 @@
     const userInput = document.getElementById("userInput");
     const sendButton = document.getElementById("sendButton");
     const clearButton = document.getElementById("clearButton");
-    const stopVoiceButton = document.getElementById("stopVoiceButton");
 
-    // Stores this conversation's messages for context.
     let conversation = [];
     let isLoading = false;
-    let currentUtterance = null;
-    let activeVoiceButton = null;
-    let voiceRequestId = 0;
+
+    // Cute pop sounds using the browser's built-in audio.
+    // No external audio files or API keys needed.
+    let audioContext = null;
+
+    function playPop(type = "receive") {
+      try {
+        const AudioContextClass =
+          window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioContextClass) return;
+
+        if (!audioContext) {
+          audioContext = new AudioContextClass();
+        }
+
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
+
+        const now = audioContext.currentTime;
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        if (type === "send") {
+          // Small, high-pitched outgoing pop.
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(720, now);
+          oscillator.frequency.exponentialRampToValueAtTime(
+            480, now + 0.07
+          );
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.12, now + 0.008);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+
+          oscillator.start(now);
+          oscillator.stop(now + 0.1);
+        } else {
+          // Soft, bubbly incoming pop.
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(520, now);
+          oscillator.frequency.exponentialRampToValueAtTime(
+            880, now + 0.09
+          );
+
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.14, now + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+
+          oscillator.start(now);
+          oscillator.stop(now + 0.17);
+        }
+      } catch (error) {
+        console.log("Sound is unavailable:", error);
+      }
+    }
 
     function scrollToBottom() {
       messagesElement.scrollTop = messagesElement.scrollHeight;
@@ -462,28 +514,19 @@
 
       row.appendChild(name);
       row.appendChild(bubble);
-
-      if (role === "assistant") {
-        const voiceButton = document.createElement("button");
-        voiceButton.type = "button";
-        voiceButton.className = "listen-button";
-        voiceButton.textContent = "🔊 Listen to Blossom";
-        voiceButton.addEventListener("click", function () {
-          toggleVoice(text, voiceButton);
-        });
-        row.appendChild(voiceButton);
-      }
-
       messagesElement.appendChild(row);
+
       scrollToBottom();
-      return row;
     }
 
     function showTyping() {
       const typing = document.createElement("div");
       typing.className = "typing";
       typing.id = "typingIndicator";
-      typing.textContent = "🌸 Blossom is thinking...";
+      typing.innerHTML =
+        '🌸 Blossom is typing<span class="typing-dots">' +
+        '<span>.</span><span>.</span><span>.</span></span>';
+
       messagesElement.appendChild(typing);
       scrollToBottom();
     }
@@ -493,115 +536,17 @@
       if (typing) typing.remove();
     }
 
-    function chooseVoice() {
-      if (!("speechSynthesis" in window)) return null;
-
-      const voices = window.speechSynthesis.getVoices();
-      if (!voices.length) return null;
-
-      // Prefer a feminine-sounding English voice when available.
-      const preferredNames = [
-        "samantha", "aria", "jenny", "zira",
-        "victoria", "karen", "moira", "tessa",
-        "susan", "eva", "google us english"
-      ];
-
-      const englishVoices = voices.filter(function (voice) {
-        return /^en[-_]/i.test(voice.lang);
-      });
-
-      for (const preferred of preferredNames) {
-        const match = englishVoices.find(function (voice) {
-          return voice.name.toLowerCase().includes(preferred);
-        });
-        if (match) return match;
-      }
-
-      return englishVoices.find(function (voice) {
-        return /female|woman/i.test(voice.name);
-      }) || englishVoices.find(function (voice) {
-        return /^en[-_]IN$/i.test(voice.lang);
-      }) || englishVoices[0] || voices[0];
-    }
-
-    function stopVoice() {
-      voiceRequestId++;
-
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-
-      if (activeVoiceButton) {
-        activeVoiceButton.textContent = "🔊 Listen to Blossom";
-      }
-
-      activeVoiceButton = null;
-      currentUtterance = null;
-    }
-
-    function toggleVoice(text, button) {
-      if (!("speechSynthesis" in window) ||
-          typeof SpeechSynthesisUtterance === "undefined") {
-        alert("Voice playback is not supported by this browser. Try the latest Chrome or Edge.");
-        return;
-      }
-
-      // Clicking the active button stops playback.
-      if (activeVoiceButton === button) {
-        stopVoice();
-        return;
-      }
-
-      stopVoice();
-      const thisRequest = voiceRequestId;
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      currentUtterance = utterance;
-
-      const voice = chooseVoice();
-      if (voice) {
-        utterance.voice = voice;
-        utterance.lang = voice.lang;
-      } else {
-        utterance.lang = "en-IN";
-      }
-
-      utterance.rate = 0.96;
-      utterance.pitch = 1.15;
-      utterance.volume = 1;
-
-      activeVoiceButton = button;
-      button.textContent = "⏹ Stop listening";
-
-      utterance.onend = function () {
-        if (thisRequest === voiceRequestId) {
-          button.textContent = "🔊 Listen to Blossom";
-          activeVoiceButton = null;
-          currentUtterance = null;
-        }
-      };
-
-      utterance.onerror = function () {
-        if (thisRequest === voiceRequestId) {
-          button.textContent = "🔊 Listen to Blossom";
-          activeVoiceButton = null;
-          currentUtterance = null;
-        }
-      };
-
-      // Some browsers load available voices asynchronously.
-      window.speechSynthesis.speak(utterance);
-    }
-
     async function sendMessage(message) {
       const text = message.trim();
+
       if (!text || isLoading) return;
 
-      stopVoice();
       isLoading = true;
       sendButton.disabled = true;
       userInput.disabled = true;
 
+      // Sound plays after the user sends a message.
+      playPop("send");
       addMessage("user", text);
       conversation.push({ role: "user", content: text });
 
@@ -631,7 +576,11 @@
         }
 
         hideTyping();
+
+        // Show the incoming message and play its pop.
         addMessage("assistant", data.reply);
+        playPop("receive");
+
         conversation.push({
           role: "assistant",
           content: data.reply
@@ -644,6 +593,8 @@
           "Oops bestie! 💔 I couldn't connect just now. Please try again in a moment.";
 
         addMessage("assistant", errorMessage);
+        playPop("receive");
+
         console.error("Blossom API error:", error);
 
       } finally {
@@ -668,26 +619,16 @@
     clearButton.addEventListener("click", function () {
       if (isLoading) return;
 
-      stopVoice();
       conversation = [];
       messagesElement.innerHTML = "";
 
-      const welcomeText =
-        "Hiii bestie! 💗 Fresh chat, fresh chaos. What's on your mind? 👀";
+      addMessage(
+        "assistant",
+        "Hiii bestie! 💗 Fresh chat, fresh chaos. What's on your mind? 👀"
+      );
 
-      addMessage("assistant", welcomeText);
       userInput.focus();
     });
-
-    stopVoiceButton.addEventListener("click", stopVoice);
-
-    // Load browser voices when available.
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = function () {
-        window.speechSynthesis.getVoices();
-      };
-    }
 
     userInput.focus();
   </script>
